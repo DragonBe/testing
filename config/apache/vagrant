@@ -1,0 +1,15 @@
+<VirtualHost *:80>
+
+    ServerName in2it-test.local
+    ServerAlias www.in2it-test.local
+
+    DocumentRoot "/srv/www/public"
+    <Directory "/srv/www/public">
+        Options Indexes FollowSymlinks
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+        DirectoryIndex index.php
+    </Directory>
+
+</VirtualHost>
