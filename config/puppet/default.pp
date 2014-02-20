@@ -57,6 +57,34 @@ class setup {
     ensure => present,
   }
 
+  package { "php-pear":
+    ensure => present,
+  }
+
+  exec {"pear upgrade":
+    command => "/usr/bin/pear upgrade",
+    require => Package['php-pear'],
+    returns => [ 0, '', ' ']
+  }
+
+  exec { "pear auto_discover" :
+    command => "/usr/bin/pear config-set auto_discover 1",
+    require => [Package['php-pear']],
+    returns => [ 0, '', ' ']
+  }
+
+  exec { "pear update-channels" :
+    command => "/usr/bin/pear update-channels",
+    require => [Package['php-pear']],
+    returns => [ 0, '', ' ']
+  }
+
+  exec {"pear install phpunit":
+    command => "/usr/bin/pear install --alldeps pear.phpunit.de/PHPUnit",
+    creates => '/usr/bin/phpunit',
+    require => Exec['pear update-channels']
+  }
+
   file { "/etc/php5/conf.d/timezone.ini":
     replace => false,
     ensure => present,
